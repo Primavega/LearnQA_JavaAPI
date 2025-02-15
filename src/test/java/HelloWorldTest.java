@@ -35,4 +35,19 @@ public class HelloWorldTest {
             System.out.println(message);
         }
     }
+
+    //Ex6
+    @Test
+    public void testGetRedirectLink() {
+        Response response = RestAssured
+                .given()
+                .redirects()
+                .follow(false)
+                .when()
+                .get("https://playground.learnqa.ru/api/long_redirect")
+                .andReturn();
+
+        String redirectLink = response.getHeader("Location");
+        System.out.println(redirectLink);
+    }
 }
