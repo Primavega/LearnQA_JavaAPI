@@ -4,6 +4,8 @@ import io.restassured.response.Response;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 public class HelloWorldTest {
 
     @Test
@@ -79,5 +81,44 @@ public class HelloWorldTest {
                 System.out.println("\nRedirects Number " + redirectsNumber);
             }
         }
+    }
+
+    //Ex8
+    @Test
+    public void testGetToken() throws InterruptedException {
+        String status;
+        String result;
+
+        JsonPath response = RestAssured
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+
+        String token = response.getString("token");
+        int seconds = response.getInt("seconds");
+
+        status = executeRequest(token).getString("status");
+
+        if(status.equals("Job is NOT ready")){
+            System.out.println(status);
+            Thread.sleep(TimeUnit.SECONDS.toMillis(seconds));
+        }
+
+        response = executeRequest(token);
+
+        status = response.getString("status");
+        result = response.getString("result");
+        if(status.equals("Job is ready") &&  result != null){
+            System.out.println("\nresult " + result);
+        } else {
+            System.out.println("\nSomething wrong");
+        }
+    }
+
+    private JsonPath executeRequest(String token){
+        return RestAssured
+                .given()
+                .param("token", token)
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
     }
 }
