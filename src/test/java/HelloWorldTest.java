@@ -50,4 +50,34 @@ public class HelloWorldTest {
         String redirectLink = response.getHeader("Location");
         System.out.println(redirectLink);
     }
+
+    //Ex7
+    @Test
+    public void testGetRedirectsNumber() {
+
+        int statusCode = 0;
+        int redirectsNumber = 0;
+        String link = "https://playground.learnqa.ru/api/long_redirect";
+
+        while(statusCode != 200) {
+            Response response = RestAssured
+                    .given()
+                    .redirects()
+                    .follow(false)
+                    .when()
+                    .get(link)
+                    .andReturn();
+
+            statusCode = response.getStatusCode();
+            System.out.println("\nStatus Code " + statusCode);
+
+            if(statusCode != 200) {
+                link = response.getHeader("Location");
+                System.out.println("\nRedirect to " + link);
+                redirectsNumber++;
+            } else {
+                System.out.println("\nRedirects Number " + redirectsNumber);
+            }
+        }
+    }
 }
