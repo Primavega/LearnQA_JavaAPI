@@ -128,5 +128,62 @@ public class HelloWorldTest {
                 .get("https://playground.learnqa.ru/ajax/api/longtime_job")
                 .jsonPath();
     }
+    //Ex9
+    @Test
+    public void testGetPassword() {
 
+        Set<String> passwords = getPasswords();
+
+        for (String pass : passwords) {
+
+            Map<String, String> data = new HashMap<>();
+            data.put("login", "super_admin");
+            data.put("password", pass);
+
+            Response responseForGet = RestAssured
+                    .given()
+                    .body(data)
+                    .post("https://playground.learnqa.ru/ajax/api/get_secret_password_homework")
+                    .andReturn();
+
+            String responseCookie = responseForGet.getCookie("auth_cookie");
+            Map<String, String> cookies = new HashMap<>();
+            if (responseCookie != null) {
+                cookies.put("auth_cookie", responseCookie);
+            }
+            Response responseForCheck = RestAssured
+                    .given()
+                    .body(data)
+                    .cookies(cookies)
+                    .when()
+                    .post("https://playground.learnqa.ru/api/check_auth_cookie")
+                    .andReturn();
+
+            if(!responseForCheck.htmlPath().getString("html.body").equals("You are NOT authorized")){
+                responseForCheck.print();
+                System.out.println("\nRight password is: " + pass);
+                return;
+            }
+        }
+    }
+
+    private Set<String> getPasswords(){
+        Set<String> passwords = new LinkedHashSet<>();
+        String filePath = "src/test/java/input.txt"; // Путь к файлу с входными данными
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] words = line.split("\\s+");
+                for (String word : words) {
+                    // Добавляем только уникальные слова
+                    passwords.add(word.trim());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении файла: " + e.getMessage());
+        }
+
+        return passwords;
+    }
 }
