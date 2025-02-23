@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HelloWorldTest {
@@ -197,4 +198,14 @@ public class HelloWorldTest {
         assertTrue(string.length() > 15, "String length is less then 15");
     }
 
+    //Ex11
+    @Test
+    public void testGetCookie(){
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/homework_cookie")
+                .andReturn();
+
+        String cookie = response.getCookie("HomeWork");
+        assertEquals(cookie, "hw_value", "Cookie value " + cookie + " is not correct");
+    }
 }
