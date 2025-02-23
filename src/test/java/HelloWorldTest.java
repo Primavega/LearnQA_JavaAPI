@@ -2,7 +2,10 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,6 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -218,5 +222,58 @@ public class HelloWorldTest {
 
         String header = response.getHeader("x-secret-homework-header");
         assertEquals(header, "Some secret value", "Header value " + header + " is not correct");
+    }
+
+    //Ex13
+    @ParameterizedTest
+    @MethodSource("provideData")
+    public void testUserAgent(Map<String, String> data){
+
+        RequestSpecification spec = RestAssured.given();
+        spec.baseUri("https://playground.learnqa.ru/ajax/api/user_agent_check");
+        spec.header("User-Agent", data.get("user_agent"));
+        JsonPath response = spec.get().jsonPath();
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("user_agent", response.get("user_agent"));
+        responseData.put("platform", response.get("platform"));
+        responseData.put("browser", response.get("browser"));
+        responseData.put("device", response.get("device"));
+
+        assertEquals(data, responseData, "Error detected");
+    }
+
+    private static Stream<Map<String, String>> provideData() {
+        Map<String, String> data1 = new HashMap<>();
+        data1.put("user_agent", "Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30");
+        data1.put("platform", "Mobile");
+        data1.put("browser", "No");
+        data1.put("device", "Android");
+
+        Map<String, String> data2 = new HashMap<>();
+        data2.put("user_agent", "Mozilla/5.0 (iPad; CPU OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91.0.4472.77 Mobile/15E148 Safari/604.1");
+        data2.put("platform", "Mobile");
+        data2.put("browser", "Chrome");
+        data2.put("device", "iOS");
+
+        Map<String, String> data3 = new HashMap<>();
+        data3.put("user_agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
+        data3.put("platform", "Googlebot");
+        data3.put("browser", "Unknown");
+        data3.put("device", "Unknown");
+
+        Map<String, String> data4 = new HashMap<>();
+        data4.put("user_agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36 Edg/91.0.100.0");
+        data4.put("platform", "Web");
+        data4.put("browser", "Chrome");
+        data4.put("device", "No");
+
+        Map<String, String> data5 = new HashMap<>();
+        data5.put("user_agent", "Mozilla/5.0 (iPad; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1");
+        data5.put("platform", "Mobile");
+        data5.put("browser", "No");
+        data5.put("device", "iPhone");
+
+        return Stream.of(data1, data2, data3, data4, data5);
     }
 }
