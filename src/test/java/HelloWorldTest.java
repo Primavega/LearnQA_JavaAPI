@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class HelloWorldTest {
 
     @Test
@@ -186,4 +188,13 @@ public class HelloWorldTest {
 
         return passwords;
     }
+
+    // HomeWork3
+    // Ex10
+    @Test
+    public void testStringLength(){
+        String string = "Поздравляю с 23 февраля!";
+        assertTrue(string.length() > 15, "String length is less then 15");
+    }
+
 }
