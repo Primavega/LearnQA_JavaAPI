@@ -32,7 +32,7 @@ public class UserAuthTest extends BaseTestCase {
         authData.put("email" ,"vinkotov@example.com");
         authData.put("password" ,"1234");
         Response responseGetAuth = apiCoreRequests
-                .makePostRequest("https://playground.learnqa.ru/api/user/login", authData);
+                .makePostRequest(baseUrl + "user/login", authData);
 
         this.cookie = this.getCookie(responseGetAuth,"auth_sid");
         this.header = this.getHeader(responseGetAuth, "x-csrf-token");
@@ -45,7 +45,7 @@ public class UserAuthTest extends BaseTestCase {
     public void testAuthUser(){
 
         Response pesponseCheckAuth = apiCoreRequests
-                .makeGetRequest("https://playground.learnqa.ru/api/user/auth", this.header, this.cookie);
+                .makeGetRequest(baseUrl + "user/auth", this.header, this.cookie);
 
         Assertions.assertJsonByName(pesponseCheckAuth, "user_id", this.userIdOnAuth);
     }
@@ -57,13 +57,13 @@ public class UserAuthTest extends BaseTestCase {
     public void testNegativeAuthUser(String condition) {
         if (condition.equals("cookie")) {
             Response responseForCheck = apiCoreRequests.makeGetRequestWithCookie(
-                    "https://playground.learnqa.ru/api/user/auth",
+                    baseUrl + "user/auth",
                     this.cookie
             );
             Assertions.assertJsonByName(responseForCheck, "user_id", 0);
         } else if (condition.equals("headers")) {
             Response responseForCheck = apiCoreRequests.makeGetRequestWithToken(
-                    "https://playground.learnqa.ru/api/user/auth",
+                    baseUrl + "user/auth",
                     this.header
             );
             Assertions.assertJsonByName(responseForCheck, "user_id", 0);

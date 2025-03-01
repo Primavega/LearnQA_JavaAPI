@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BaseTestCase {
 
     protected final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+    protected final String baseUrl = "https://playground.learnqa.ru/api/";
 
     protected String getHeader(Response Response, String name){
         Headers headers = Response.getHeaders();

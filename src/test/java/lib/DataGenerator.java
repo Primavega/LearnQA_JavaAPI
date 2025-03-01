@@ -1,5 +1,7 @@
 package lib;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +11,15 @@ public class DataGenerator {
     public static String getRandomEmail(){
         String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
         return "learnqa" + timestamp + "@example.com";
+    }
+
+    public static String getRandomIncorrectEmail(){
+        String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+        return "learnqa" + timestamp + "example.com";
+    }
+
+    public static String getRandomUsername(int length){
+        return RandomStringUtils.random(length, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
     }
 
     public static Map<String, String> getRegistrationData(){

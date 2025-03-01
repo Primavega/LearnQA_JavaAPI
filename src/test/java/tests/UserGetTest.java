@@ -13,7 +13,7 @@ public class UserGetTest extends BaseTestCase {
 
     @Test
     public void testGetUserDataNotAuth(){
-        Response responseUserData = apiCoreRequests.makeGetRequest("https://playground.learnqa.ru/api/user/2");
+        Response responseUserData = apiCoreRequests.makeGetRequest(baseUrl + "user/2");
 
         Assertions.assertJsonHasField(responseUserData, "username");
         Assertions.assertJsonHasNotField(responseUserData, "firstName");
@@ -29,13 +29,13 @@ public class UserGetTest extends BaseTestCase {
         authData.put("password", "1234");
 
         Response responseGetAuth = apiCoreRequests.makePostRequest(
-                "https://playground.learnqa.ru/api/user/login", authData);
+                baseUrl + "user/login", authData);
 
         String header = this.getHeader(responseGetAuth, "x-csrf-token");
         String cookie = this.getCookie(responseGetAuth, "auth_sid");
 
         Response responseUserData = apiCoreRequests.makeGetRequest(
-                "https://playground.learnqa.ru/api/user/2", header, cookie);
+                baseUrl + "user/2", header, cookie);
 
         Assertions.assertJsonHasField(responseUserData, "username");
         Assertions.assertJsonHasField(responseUserData, "firstName");
