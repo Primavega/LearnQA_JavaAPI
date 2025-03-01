@@ -1,17 +1,24 @@
 package tests;
 
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Epic("Edit user cases")
+@Feature("User editing")
 public class UserEditTest extends BaseTestCase {
 
     @Test
+    @Description("This test edit just created user by himself")
+    @DisplayName("Test edit created user")
+    @Severity(SeverityLevel.CRITICAL)
     public void testEditJustCreatedTest(){
 
         //create user
@@ -51,6 +58,9 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to edit user without authorization")
+    @DisplayName("Test edit user without auth")
+    @Severity(SeverityLevel.BLOCKER)
     public void testEditUserNotAuth(){
 
         //create user
@@ -75,6 +85,10 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to edit user by another user")
+    @DisplayName("Test edit user by another user")
+    @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-12346")
     public void testEditUserAsAnotherUser(){
 
         //create user1
@@ -113,6 +127,8 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to edit user using email without @")
+    @DisplayName("Test edit user using incorrect email")
     public void testEditUsingIncorrectEmail(){
 
         //create user
@@ -145,6 +161,8 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to edit user using too short username")
+    @DisplayName("Test edit user using short name")
     public void testEditUsingShortUsername(){
 
         //create user

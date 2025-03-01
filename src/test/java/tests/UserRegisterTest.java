@@ -1,10 +1,12 @@
 package tests;
 
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -14,10 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-//лекция 4
+@Epic("Create user cases")
+@Feature("User registration")
 public class UserRegisterTest extends BaseTestCase {
 
     @Test
+    @Description("This test tries to create user with email that is already registered")
+    @DisplayName("Test create user with existing email")
+    @Severity(SeverityLevel.CRITICAL)
     public void testCreateUserWithExistingEmail(){
         String email = "vinkotov@example.com";
 
@@ -33,6 +39,9 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test creates user successfully")
+    @DisplayName("Test create user successfully")
+    @Severity(SeverityLevel.CRITICAL)
     public void testCreateUserSuccessfully(){
 
         Map<String, String> userData =  DataGenerator.getRegistrationData();
@@ -45,6 +54,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to create user with email without @")
+    @DisplayName("Test create user with incorrect email")
     public void testCreateUserWithIncorrectEmail(){
         String email = DataGenerator.getRandomIncorrectEmail();
 
@@ -60,6 +71,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @ParameterizedTest
+    @Description("This test tries to create user without some parameter")
+    @DisplayName("Test create user without parameter")
     @MethodSource("provideData")
     public void testCreateUserWithoutParameter(Map<String, String> userData){
 
@@ -94,6 +107,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to create user with too short name")
+    @DisplayName("Test create user with short name")
     public void testCreateUserWithShortName(){
         String name = DataGenerator.getRandomUsername(1);
 
@@ -109,6 +124,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to create user with too long name")
+    @DisplayName("Test create user with long name")
     public void testCreateUserWithLongName(){
         String name = DataGenerator.getRandomUsername(251);
 

@@ -1,17 +1,23 @@
 package tests;
 
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Epic("Delete user cases")
+@Feature("User deletion")
 public class UserDeleteTest extends BaseTestCase {
 
     @Test
+    @Description("This test tries to delete user with ID = 2 that is protected form deletion")
+    @DisplayName("Test delete protected user")
     public void testDeleteProtectedUser(){
 
         //login
@@ -34,6 +40,8 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test delete user that was just created by himself")
+    @DisplayName("Test delete  just created user")
     public void testDeleteJustCreatedUser(){
 
         //create user
@@ -65,6 +73,10 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to delete user by another user")
+    @DisplayName("Test delete user by another user")
+    @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-12345")
     public void testDeleteUserAsAnotherUser(){
 
         //create user1
@@ -86,10 +98,6 @@ public class UserDeleteTest extends BaseTestCase {
                 baseUrl + "user/login", authData);
 
         //try delete user2
-        String newName = "Changed Name";
-        Map<String, String> editData = new HashMap<>();
-        editData.put("firstName", newName);
-
         Response responseDeleteUser = apiCoreRequests.makeDeleteRequest(
                 baseUrl + "user/" + user2Id,
                 this.getHeader(responseGetAuth, "x-csrf-token"),

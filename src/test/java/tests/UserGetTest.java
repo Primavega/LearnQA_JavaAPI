@@ -1,18 +1,25 @@
 package tests;
 
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Epic("Get user data cases")
+@Feature("User reading")
 public class UserGetTest extends BaseTestCase {
 
     @Test
+    @Description("This test tries to get user data without authorization")
+    @DisplayName("Test get user without auth")
+    @Severity(SeverityLevel.CRITICAL)
     public void testGetUserDataNotAuth(){
         Response responseUserData = apiCoreRequests.makeGetRequest(baseUrl + "user/2");
 
@@ -23,6 +30,8 @@ public class UserGetTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test gets user data by himself")
+    @DisplayName("Test get user data successfully")
     public void testGetUserDetailsAuthAsSameUser(){
 
         Map<String, String> authData = new HashMap<>();
@@ -45,6 +54,9 @@ public class UserGetTest extends BaseTestCase {
     }
 
     @Test
+    @Description("This test tries to get user data without permission")
+    @DisplayName("Test get user data by another user")
+    @Severity(SeverityLevel.CRITICAL)
     public void testGetUserDetailsAuthAsAnotherUser(){
 
         //create user1
