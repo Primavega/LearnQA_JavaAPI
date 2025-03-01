@@ -22,11 +22,8 @@ public class UserRegisterTest extends BaseTestCase {
         userData.put("email", email);
         userData = DataGenerator.getRegistrationData(userData);
 
-        Response responseCreateAuth = RestAssured
-                .given()
-                .body(userData)
-                .post("https://playground.learnqa.ru/api/user/")
-                .andReturn();
+        Response responseCreateAuth = apiCoreRequests.makePostRequest(
+                "https://playground.learnqa.ru/api/user/", userData);
 
         Assertions.assertResponseTextEquals(responseCreateAuth, "Users with email '" + email + "' already exists");
         Assertions.assertResponseCodeEquals(responseCreateAuth, 400);
@@ -37,11 +34,8 @@ public class UserRegisterTest extends BaseTestCase {
 
         Map<String, String> userData =  DataGenerator.getRegistrationData();
 
-        Response responseCreateAuth = RestAssured
-                .given()
-                .body(userData)
-                .post("https://playground.learnqa.ru/api/user/")
-                .andReturn();
+        Response responseCreateAuth = apiCoreRequests.makePostRequest(
+                "https://playground.learnqa.ru/api/user/", userData);
 
         String[] expectedFields = {"username","firstName","lastName","email"};
         Assertions.assertJsonHasNotFields(responseCreateAuth, expectedFields);

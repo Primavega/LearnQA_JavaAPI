@@ -9,6 +9,9 @@ import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BaseTestCase {
+
+    protected final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+
     protected String getHeader(Response Response, String name){
         Headers headers = Response.getHeaders();
 
