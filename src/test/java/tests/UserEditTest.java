@@ -82,7 +82,6 @@ public class UserEditTest extends BaseTestCase {
 
         Response responseCreateAuth = apiCoreRequests.makePostRequest(
                 baseUrl + "user/", userData);
-        String userId = responseCreateAuth.jsonPath().getString( "id");
 
         //create user2
         Map<String, String> userData2 =  DataGenerator.getRegistrationData();
@@ -96,7 +95,7 @@ public class UserEditTest extends BaseTestCase {
         Response responseGetAuth = apiCoreRequests.makePostRequest(
                 baseUrl + "user/login", authData);
 
-        //try edit as user1
+        //try edit user2
         String newName = "Changed Name";
         Map<String, String> editData = new HashMap<>();
         editData.put("firstName", newName);
