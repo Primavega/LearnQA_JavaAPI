@@ -48,4 +48,11 @@ public class DataGenerator {
         }
         return userData;
     }
+
+    public static Map<String, String> getAuthData(Map<String, String> userData){
+        Map<String, String> authData = new HashMap<>();
+        authData.put("email", userData.get("email"));
+        authData.put("password", userData.get("password"));
+        return authData;
+    }
 }
