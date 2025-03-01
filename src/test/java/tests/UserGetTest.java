@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.Assertions;
 import lib.BaseTestCase;
+import lib.DataGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -41,6 +42,40 @@ public class UserGetTest extends BaseTestCase {
         Assertions.assertJsonHasField(responseUserData, "firstName");
         Assertions.assertJsonHasField(responseUserData, "lastName");
         Assertions.assertJsonHasField(responseUserData, "email");
+    }
+
+    @Test
+    public void testGetUserDetailsAuthAsAnotherUser(){
+
+        //create user1
+        Map<String, String> userData =  DataGenerator.getRegistrationData();
+        Response responseCreateAuth = apiCoreRequests.makePostRequest(
+                baseUrl + "user/", userData);
+
+        //create user2
+        Map<String, String> userData2 =  DataGenerator.getRegistrationData();
+        Response responseCreateAuth2 = apiCoreRequests.makePostRequest(
+                baseUrl + "user/", userData2);
+        String user2Id = responseCreateAuth2.jsonPath().getString( "id");
+
+        //login as user1
+        Map<String, String> authData = new HashMap<>();
+        authData.put("email", userData.get("email"));
+        authData.put("password", userData.get("password"));
+
+        Response responseGetAuth = apiCoreRequests.makePostRequest(
+                baseUrl + "user/login", authData);
+
+        //get user2
+        Response responseUserData = apiCoreRequests.makeGetRequest(
+                baseUrl + "user/" + user2Id,
+                this.getHeader(responseGetAuth, "x-csrf-token"),
+                this.getCookie(responseGetAuth, "auth_sid")
+        );
+
+        Assertions.assertJsonHasField(responseUserData, "username");
+        String[] unexpectedFields = {"firstName", "lastName", "email"};
+        Assertions.assertJsonHasNotFields(responseUserData, unexpectedFields);
     }
 
 }
