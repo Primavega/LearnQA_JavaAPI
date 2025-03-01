@@ -10,12 +10,12 @@ public class DataGenerator {
 
     public static String getRandomEmail(){
         String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
-        return "learnqa" + timestamp + "@example.com";
+        return getRandomUsername(10) + timestamp + "@example.com";
     }
 
     public static String getRandomIncorrectEmail(){
         String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
-        return "learnqa" + timestamp + "example.com";
+        return getRandomUsername(10) + timestamp + "example.com";
     }
 
     public static String getRandomUsername(int length){

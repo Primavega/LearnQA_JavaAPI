@@ -87,6 +87,7 @@ public class UserEditTest extends BaseTestCase {
         Map<String, String> userData2 =  DataGenerator.getRegistrationData();
         Response responseCreateAuth2 = apiCoreRequests.makePostRequest(
                 baseUrl + "user/", userData2);
+
         String user2Id = responseCreateAuth2.jsonPath().getString( "id");
 
         //login as user1
